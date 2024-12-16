@@ -120,7 +120,7 @@
 
 ---
 
-Este **README** oferece uma visão geral do projeto, como configurá-lo localmente e o que ele oferece. Ele também orienta sobre as tecnologias e como contribuir. Espero que isso ajude quem for começar a trabalhar no **VendedorPlus**!
+ **VendedorPlus**
 
 ---
 Vagner Giraldino Jr.
