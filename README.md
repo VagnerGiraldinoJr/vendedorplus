@@ -1,66 +1,128 @@
+# 📦 **VendedorPlus** - Sistema de Vendas Online 🛒
+
+**VendedorPlus** é um sistema de vendas online destinado a empreendedores que comercializam produtos porta a porta. O projeto é construído com Laravel e oferece funcionalidades tanto para clientes quanto para administradores. Ele inclui o gerenciamento de produtos, pedidos, clientes, e um painel administrativo completo.
+
+---
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+## 🔧 **Tecnologias Utilizadas** 🛠️
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Laravel** (8.x ou superior) 🚀
+  - Framework PHP robusto para construção de aplicações web.
+- **PHP** (versão 8.0 ou superior) 💻
+  - Ambiente de execução necessário para rodar o Laravel.
+- **Vite** ⚡️
+  - Ferramenta moderna para build e bundling de assets, utilizada para otimizar o carregamento e performance.
+- **AdminLTE** 📊
+  - Interface de administração responsiva e intuitiva, baseada em Bootstrap.
+- **MySQL** 🗄️
+  - Banco de dados relacional utilizado para armazenar os dados da aplicação.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## ⚙️ **Configuração do Ambiente de Desenvolvimento** 🔧
 
-## Learning Laravel
+1. **Instalar Dependências**:
+   - Clone o repositório:
+     ```bash
+     git clone https://github.com/VagnerGiraldinoJr/vendedorplus.git
+     ```
+   - Navegue até o diretório do projeto:
+     ```bash
+     cd vendedorplus
+     ```
+   - Instale as dependências do Composer:
+     ```bash
+     composer install
+     ```
+   - Instale as dependências do Vite:
+     ```bash
+     npm install
+     ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. **Configurar o Ambiente**:
+   - Copie o arquivo `.env.example` para `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   - No arquivo `.env`, configure o acesso ao banco de dados, as chaves de autenticação e as configurações de e-mail.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+3. **Gerar as Chaves de Aplicação**:
+   - Execute o comando abaixo para gerar a chave de aplicação do Laravel:
+     ```bash
+     php artisan key:generate
+     ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. **Rodar as Migrations**:
+   - Crie o banco de dados e execute as migrations:
+     ```bash
+     php artisan migrate
+     ```
 
-## Laravel Sponsors
+5. **Rodar o Servidor Local**:
+   - Inicie o servidor de desenvolvimento:
+     ```bash
+     php artisan serve
+     ```
+   - Acesse a aplicação em: `http://127.0.0.1:8000`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🌍 **Funcionalidades** 🚀
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- **Clientes**:
+  - Navegação pelos produtos disponíveis 🛍️
+  - Visualização detalhada de produtos 📦
+  - Cadastro e login de clientes 🔑
+  - Realização de pedidos 📝
+  
+- **Administradores**:
+  - Acesso ao painel administrativo 🖥️
+  - Gestão de produtos, clientes e pedidos 📊
+  - Visibilidade de pedidos pendentes e detalhes de vendas 📈
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🛠️ **Rotas Importantes** 🚦
 
-## Code of Conduct
+- **Público**:
+  - `/` - Página inicial com destaque para produtos.
+  - `/shop` - Exibe todos os produtos.
+  - `/product/{id}` - Exibe o detalhe de um produto.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **Autenticação**:
+  - `/login` - Tela de login.
+  - `/register` - Tela de registro.
+  - `/logout` - Rota para realizar logout.
 
-## Security Vulnerabilities
+- **Painel Administrativo**:
+  - `/admin/dashboard` - Dashboard com informações e estatísticas.
+  - `/admin/products` - Gestão de produtos.
+  - `/admin/clients` - Gestão de clientes.
+  - `/admin/orders` - Visualização e gerenciamento de pedidos.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## ⚡ **Próximos Passos** 📈
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Melhorias na UI**: Refinar a interface para tornar o painel administrativo mais funcional e intuitivo.
+- **Aprimorar o Sistema de Pedidos**: Adicionar funcionalidades de pagamentos e confirmações de pedidos.
+- **Aprimorar as Funções de Administração**: Incluir mais recursos no painel para facilitar o gerenciamento de vendas e clientes.
+
+---
+
+## 🎨 **Contribuições** 🙌
+
+- Faça um fork do repositório, crie uma branch com a sua feature/bugfix, e envie um PR (Pull Request).
+- Dúvidas? Pergunte nas Issues do GitHub!
+
+---
+
+ **VendedorPlus**
+
+---
+Vagner Giraldino Jr.
+🚀🚀🚀🚀🚀🚀🚀🚀🚀
+https://pt.gravatar.com/vgiraldino
