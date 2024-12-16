@@ -36,12 +36,12 @@ Route::post('/logout', function (\Illuminate\Http\Request $request) {
 
 // Rotas autenticadas (usuários logados)
 Route::middleware('auth')->group(function () {
-    // Perfil do usuário
+// Perfil do usuário
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Redirecionamento pós-login
+// Redirecionamento pós-login
     Route::get('/redirect', function () {
         return auth()->user()->hasRole('admin')
             ? redirect()->route('admin.dashboard')
@@ -50,8 +50,6 @@ Route::middleware('auth')->group(function () {
 });
 
 // Rotas administrativas (restritas a administradores)
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::get('dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::resource('products', ProductController::class);
-    Route::resource('clients', ClientController::class);
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 });

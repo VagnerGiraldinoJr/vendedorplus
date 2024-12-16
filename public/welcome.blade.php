@@ -3,7 +3,7 @@
 @section('title', 'Bem-vindo ao VendedorPlus')
 
 @section('content_header')
-    <h1>Bem-vindo ao VendedorPlus</h1>
+    <h1>Bem-vindo ao VendedorPlus PUBLICO</h1>
 @endsection
 
 

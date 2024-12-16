@@ -3,12 +3,10 @@
 @section('title', 'Bem-vindo ao VendedorPlus')
 
 @section('content_header')
-    @auth
-        <h1>Bem-vindo à Loja {{ $user->role }}</h1>
-    @else
+
         <h1>Bem-vindo à Loja</h1>
-        <p>Por favor, faça login para ver seu papel.</p>
-    @endauth
+
+
 @endsection
 
 @section('content')

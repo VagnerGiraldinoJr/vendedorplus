@@ -9,7 +9,6 @@ class AdminController extends Controller
 {
     public function index()
     {
-        // Retorne a view para o painel de administração
         return view('admin.dashboard');
     }
 }
