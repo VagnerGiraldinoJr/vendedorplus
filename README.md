@@ -34,3 +34,5 @@ Flexibilidade e Mobilidade: Acesso em qualquer lugar e a qualquer momento, permi
 Conclusão:
 
 O VendedorPlus é a ferramenta ideal para vendedores porta a porta e sacoleiras que buscam otimizar suas operações, aumentar suas vendas e melhorar o relacionamento com seus clientes. Experimente o VendedorPlus e transforme sua maneira de vender!
+
+https://pt.gravatar.com/vgiraldino
