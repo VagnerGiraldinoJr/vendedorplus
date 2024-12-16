@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
 
 // Rotas administrativas (restritas a administradores)
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::get('dashboard', [AdminController::class, 'index'])->name('admin.dashboard'); // Painel administrativo
-    Route::resource('products', ProductController::class); // Gerenciamento de produtos
-    Route::resource('clients', ClientController::class); // Gerenciamento de clientes
+    Route::get('dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::resource('products', ProductController::class);
+    Route::resource('clients', ClientController::class);
 });
