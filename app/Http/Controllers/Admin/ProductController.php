@@ -10,8 +10,12 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
-        return view('admin.products.index', compact('products'));
+
+        $products = Product::paginate(12); // Assumindo que você tem um modelo "Product"
+        return view('home', compact('products'));
+
+//        $products = Product::all();
+//        return view('admin.products.index', compact('products'));
     }
 
     public function create()

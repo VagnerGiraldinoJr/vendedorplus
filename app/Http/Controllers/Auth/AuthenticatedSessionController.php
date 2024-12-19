@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Exibe a página de login.
      */
-    public function create()
+    public function create(): View
     {
         return view('auth.login');
     }
@@ -20,43 +22,41 @@ class AuthenticatedSessionController extends Controller
     /**
      * Lida com a autenticação do usuário.
      */
-    public function store(Request $request)
+    public function store(LoginRequest $request): RedirectResponse
     {
-        // Valida os campos de login
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
+        // Autentica o usuário
+        $request->authenticate();
 
-        // Tenta autenticar o usuário
-        if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
-            $request->session()->regenerate();
+        // Regenera a sessão para evitar o fixação de sessão
+        $request->session()->regenerate();
 
-            // Verifica o papel do usuário
-            $user = Auth::user();
-            if (!$user->hasRole('admin')) {
-                $user->assignRole('admin'); // Atribui a role caso não tenha
-            }
+        // Obtém o usuário autenticado
+        $user = Auth::user();
 
-            return redirect()->intended($user->hasRole('admin') ? route('admin.dashboard') : route('shop.index'));
+        // Verifica o papel do usuário e faz o redirecionamento adequado
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.dashboard'); // Redireciona para a dashboard do admin
+        } else {
+
+            return redirect()->route('shop.index'); // Redireciona para a loja (para usuários comuns)
         }
-
-        // Se falhar, lança exceção
-        throw ValidationException::withMessages([
-            'email' => __('auth.failed'),
-        ]);
     }
 
     /**
-     * Faz logout do usuário.
+     * Faz o logout do usuário.
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): RedirectResponse
     {
-        Auth::logout();
+        // Realiza o logout
+        Auth::guard('web')->logout();
 
+        // Invalida a sessão do usuário
         $request->session()->invalidate();
+
+        // Regenera o token CSRF
         $request->session()->regenerateToken();
 
+        // Redireciona para a página inicial
         return redirect('/');
     }
 }

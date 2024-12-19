@@ -14,6 +14,7 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
+
     public function create(): View
     {
         return view('auth.register');
@@ -33,15 +34,15 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Associa automaticamente a role 'user'
+        $user->assignRole('user');
+
         event(new Registered($user));
 
         Auth::login($user);
 
-        // Redireciona para a loja ou painel administrativo dependendo da role do usuário
-        if ($user->hasRole('admin')) {
-            return redirect()->route('admin.dashboard');  // Se for admin, redireciona para o painel administrativo
-        }
-
-        return redirect()->route('home');  // Se for usuário comum, redireciona para a loja
+        return redirect(route('dashboard', absolute: false));
     }
+
+
 }
