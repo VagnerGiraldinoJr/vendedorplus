@@ -5,20 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class ClientController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Exibe a lista de clientes.
      */
     public function index()
     {
-        $clients = Client::all();
+        $clients = Client::paginate(10); // Paginação com 10 clientes
         return view('admin.clients.index', compact('clients'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Exibe o formulário para criar um novo cliente.
      */
     public function create()
     {
@@ -26,103 +27,109 @@ class ClientController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Salva um novo cliente no banco de dados.
      */
+
+
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nome' => 'required',
-            'email' => 'required|email|unique:clients',
-            'celular' => 'nullable',
-            'senha' => 'required|min:4',
-            'cpf' => ['required', 'string', function ($attribute, $value, $fail) {
-                if (!$this->validateCPF($value)) {
-                    $fail('O CPF informado não é válido.');
-                }
-            }],
-        ]);
+        $validated = $this->validateClient($request);
 
-        Client::create($validated);
+        try {
+            $client = Client::create([
+                'nome' => $validated['nome'],
+                'email' => $validated['email'],
+                'celular' => $validated['celular'],
+                'senha' => bcrypt($validated['senha']),
+                'cpf' => $validated['cpf'] ?? null,
+            ]);
 
-        return redirect()->route('clients.index')->with('success', 'Cliente cadastrado com sucesso!');
+            // Garantir que o cliente tenha a role 'user'
+            if (!Role::where('name', 'user')->exists()) {
+                Role::create(['name' => 'user']);
+            }
 
+            $client->assignRole('user');
+
+            return redirect()->route('admin.clients.index')->with('success', 'Cliente criado com sucesso!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Erro ao criar cliente: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Exibe o formulário para editar um cliente existente.
      */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Client $client)
-    {
+        $client = Client::findOrFail($id);
         return view('admin.clients.edit', compact('client'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Atualiza os dados de um cliente existente.
      */
-    public function update(Request $request, Client $client)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'nome' => 'required',
-            'email' => 'required|email|unique:clients,email,' . $client->id,
-            'celular' => 'nullable',
-            'senha' => 'required|min:4',
-            'cpf' => ['required', 'string', function ($attribute, $value, $fail) {
-                if (!$this->validateCPF($value)) {
-                    $fail('O CPF informado não é válido.');
-                }
-            }],
-        ]);
+        $client = Client::findOrFail($id);
 
-        $client->update($validated);
+        $validated = $this->validateClient($request, $client->id);
 
-        return redirect()->route('clients.index')->with('success', 'Cliente atualizado com sucesso!');
+        try {
+            $client->update([
+                'nome' => $validated['nome'],
+                'email' => $validated['email'],
+                'celular' => $validated['celular'],
+                'cpf' => $validated['cpf'] ?? $client->cpf, // Mantém o CPF atual se não for enviado
+                'senha' => !empty($validated['senha']) ? bcrypt($validated['senha']) : $client->senha,
+            ]);
+
+            return redirect()->route('admin.clients')->with('success', 'Cliente atualizado com sucesso!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Erro ao atualizar cliente: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove um cliente do banco de dados.
      */
-    public function destroy(Client $client)
+    public function destroy($id)
     {
-        $client->delete();
-        return redirect()->route('clients.index')->with('success', 'Cliente excluído com sucesso!');
+        $client = Client::findOrFail($id);
+
+        if ($client->orders()->exists()) {
+            return redirect()->route('admin.clients.index')->with('error', 'Não é possível excluir um cliente com pedidos associados.');
+        }
+
+        try {
+            $client->delete();
+            return redirect()->route('admin.clients.index')->with('success', 'Cliente excluído com sucesso!');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.clients.index')->with('error', 'Erro ao excluir cliente: ' . $e->getMessage());
+        }
     }
 
-    protected function validateCPF($cpf)
+    /**
+     * Valida os dados do cliente.
+     */
+    private function validateClient(Request $request, $clientId = null)
     {
-        // Remove caracteres especiais
-        $cpf = preg_replace('/[^0-9]/', '', $cpf);
+        $rules = [
+            'nome' => 'required|string|max:255',
+            'email' => 'required|email|unique:clients,email,' . $clientId,
+            'celular' => 'nullable|string|max:20',
+            'senha' => 'nullable|string|min:6',
+            'cpf' => 'nullable|string|size:11|unique:clients,cpf,' . $clientId, // CPF temporariamente validado
+        ];
 
-        // Valida o tamanho
-        if (strlen($cpf) != 11) {
-            return false;
-        }
+        $messages = [
+            'nome.required' => 'O campo nome é obrigatório.',
+            'email.required' => 'O campo email é obrigatório.',
+            'email.unique' => 'Este email já está cadastrado.',
+            'cpf.unique' => 'Este CPF já está cadastrado.',
+            'senha.min' => 'A senha deve ter pelo menos 6 caracteres.',
+        ];
 
-        // Verifica se todos os números são iguais
-        if (preg_match('/(\d)\1{10}/', $cpf)) {
-            return false;
-        }
-
-        // Valida os dígitos verificadores
-        for ($t = 9; $t < 11; $t++) {
-            for ($d = 0, $c = 0; $c < $t; $c++) {
-                $d += $cpf[$c] * (($t + 1) - $c);
-            }
-
-            $d = ((10 * $d) % 11) % 10;
-
-            if ($cpf[$c] != $d) {
-                return false;
-            }
-        }
-
-        return true;
+        return $request->validate($rules, $messages);
     }
 }

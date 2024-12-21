@@ -12,37 +12,36 @@
             <h3 class="card-title">Editar Cliente</h3>
         </div>
         <div class="card-body">
-            <form action="{{ route('clients.update', $client->id) }}" method="POST">
+            <form action="{{ route('admin.clients.update', $client->id) }}" method="POST">
                 @csrf
                 @method('PUT')
+
                 <div class="form-group">
                     <label for="nome">Nome</label>
-                    <input type="text" name="nome" id="nome" class="form-control" value="{{ $client->nome }}" required>
+                    <input type="text" name="nome" id="nome" class="form-control"
+                           value="{{ old('nome', $client->nome) }}" required>
                 </div>
+
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email" class="form-control" value="{{ $client->email }}"
-                           required>
+                    <input type="email" name="email" id="email" class="form-control"
+                           value="{{ old('email', $client->email) }}" required>
                 </div>
+
                 <div class="form-group">
                     <label for="celular">Celular</label>
-                    <input type="text" name="celular" id="celular" class="form-control" value="{{ $client->celular }}">
+                    <input type="text" name="celular" id="celular" class="form-control"
+                           value="{{ old('celular', $client->celular) }}">
                 </div>
+
                 <div class="form-group">
-                    <label for="senha">Senha</label>
+                    <label for="senha">Senha (deixe em branco para manter a atual)</label>
                     <input type="password" name="senha" id="senha" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="cpf">CPF</label>
-                    <input type="text" name="cpf" id="cpf" class="form-control"
-                           value="{{ old('cpf', $client->cpf ?? '') }}" required>
-                    @error('cpf')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
                 </div>
 
                 <button type="submit" class="btn btn-primary">Atualizar</button>
             </form>
+
         </div>
     </div>
 @endsection

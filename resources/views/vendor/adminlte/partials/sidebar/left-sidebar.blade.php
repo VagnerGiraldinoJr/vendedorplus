@@ -20,7 +20,27 @@
                     <li>
                         <a href="{{ route('admin.dashboard') }}" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>Admin Dashboard</p>
+                            <p> Dashboard</p>
+                        </a>
+
+                        <a href="{{ route('admin.clients.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-user-tag"></i>
+                            <p> Clientes</p>
+                        </a>
+
+                        <a href="{{ route('admin.orders.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-cash-register"></i>
+                            <p> Pedidos</p>
+                        </a>
+
+                        <a href="{{ route('admin.products.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-gifts"></i>
+                            <p> Produtos - Loja</p>
+                        </a>
+
+                        <a href="{{ route('admin.products.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-address-card"></i>
+                            <p> Perfil Admin</p>
                         </a>
                     </li>
                 @endif

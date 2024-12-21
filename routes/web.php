@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 // Rota principal
@@ -42,6 +42,39 @@ Route::middleware('auth')->group(function () {
 Route::prefix('shop')->middleware(['auth', 'role:user'])->name('shop.')->group(function () {
     Route::get('/', [\App\Http\Controllers\ShopController::class, 'index'])->name('index');
 });
+
+// Admin - Gestão de Clientes
+
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/clients', [App\Http\Controllers\Admin\ClientController::class, 'index'])->name('admin.clients.index');
+    Route::get('/clients/create', [App\Http\Controllers\Admin\ClientController::class, 'create'])->name('admin.clients.create');
+    Route::post('/clients', [App\Http\Controllers\Admin\ClientController::class, 'store'])->name('admin.clients.store');
+    Route::get('/clients/{id}/edit', [App\Http\Controllers\Admin\ClientController::class, 'edit'])->name('admin.clients.edit');
+    Route::put('/clients/{id}', [App\Http\Controllers\Admin\ClientController::class, 'update'])->name('admin.clients.update');
+    Route::delete('/clients/{id}', [App\Http\Controllers\Admin\ClientController::class, 'destroy'])->name('admin.clients.destroy');
+});
+
+// Admin - Gestão de Pedidos
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/orders', [App\Http\Controllers\Admin\ClientController::class, 'index'])->name('admin.orders.index');
+    Route::get('/orders/create', [App\Http\Controllers\Admin\ClientController::class, 'create'])->name('admin.orders.create');
+    Route::post('/orders', [App\Http\Controllers\Admin\ClientController::class, 'store'])->name('admin.orders.store');
+    Route::get('/orders/{id}/edit', [App\Http\Controllers\Admin\ClientController::class, 'edit'])->name('admin.orders.edit');
+    Route::put('/orders/{id}', [App\Http\Controllers\Admin\ClientController::class, 'update'])->name('admin.orders.update');
+    Route::delete('/orders/{id}', [App\Http\Controllers\Admin\ClientController::class, 'destroy'])->name('admin.orders.destroy');
+});
+
+// Admin - Gestão de Produtos
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/products', [App\Http\Controllers\Admin\ClientController::class, 'index'])->name('admin.products.index');
+    Route::get('/products/create', [App\Http\Controllers\Admin\ClientController::class, 'create'])->name('admin.products.create');
+    Route::post('/products', [App\Http\Controllers\Admin\ClientController::class, 'store'])->name('admin.products.store');
+    Route::get('/products/{id}/edit', [App\Http\Controllers\Admin\ClientController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/products/{id}', [App\Http\Controllers\Admin\ClientController::class, 'update'])->name('admin.products.update');
+    Route::delete('/products/{id}', [App\Http\Controllers\Admin\ClientController::class, 'destroy'])->name('admin.products.destroy');
+});
+
 
 
 // Carregar as rotas do Breeze ou Fortify

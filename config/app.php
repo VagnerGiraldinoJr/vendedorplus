@@ -128,5 +128,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+    'pagination' => 'bootstrap-4',
 
 ];

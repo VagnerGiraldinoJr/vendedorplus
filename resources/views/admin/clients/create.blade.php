@@ -12,7 +12,7 @@
             <h3 class="card-title">Novo Cliente</h3>
         </div>
         <div class="card-body">
-            <form action="{{ route('clients.store') }}" method="POST">
+            <form action="{{ route('admin.clients.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="nome">Nome</label>
