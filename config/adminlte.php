@@ -302,11 +302,24 @@ return [
 
     'menu' => [
         [
-            'text' => 'Pages',
-            'url' => 'admin/dashboard',
-            'icon' => 'fas fa-fw fa-file',
+            'text' => 'Dashboard',
+            'url' => '/',
+            'icon' => 'fas fa-tachometer-alt',
+        ],
+        [
+            'text' => 'Gerenciar Pedidos',
+            'url' => 'admin/pedidos',
+            'icon' => 'fas fa-shopping-cart',
+            'can' => 'isAdmin', // Permissão específica para admin
+        ],
+        [
+            'text' => 'Meus Pedidos',
+            'url' => 'user/pedidos',
+            'icon' => 'fas fa-shopping-cart',
+            'can' => 'isUser', // Permissão específica para user
         ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------
