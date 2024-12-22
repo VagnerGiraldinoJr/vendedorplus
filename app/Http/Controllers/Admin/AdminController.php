@@ -11,10 +11,10 @@ class AdminController extends Controller
 {
     public function index()
     {
-        dd('testando o index do admincontroller');
-        return view('admin.dashboard');
-    }
+        $user = Auth::user(); // Obtém o usuário autenticado pelo guard 'web'
 
+        return view('admin.dashboard', compact('user'));
+    }
     public function dashboard()
     {
         $menu = [

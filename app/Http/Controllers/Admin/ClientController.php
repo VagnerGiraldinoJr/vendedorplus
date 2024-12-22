@@ -30,10 +30,15 @@ class ClientController extends Controller
      * Salva um novo cliente no banco de dados.
      */
 
-
     public function store(Request $request)
     {
-        $validated = $this->validateClient($request);
+        $validated = $request->validate([
+            'nome' => 'required|string|max:255',
+            'email' => 'required|email|unique:clients,email',
+            'celular' => 'nullable|string|max:20',
+            'senha' => 'required|string|min:6',
+            'cpf' => 'nullable|string|size:11|unique:clients,cpf',
+        ]);
 
         try {
             $client = Client::create([
@@ -44,12 +49,11 @@ class ClientController extends Controller
                 'cpf' => $validated['cpf'] ?? null,
             ]);
 
-            // Garantir que o cliente tenha a role 'user'
-            if (!Role::where('name', 'user')->exists()) {
-                Role::create(['name' => 'user']);
-            }
+            // Garantir que a role 'user' exista para o guard 'web'
+            $role = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
 
-            $client->assignRole('user');
+            // Atribuir role 'user' (guard web) ao cliente
+            $client->assignRole($role);
 
             return redirect()->route('admin.clients.index')->with('success', 'Cliente criado com sucesso!');
         } catch (\Exception $e) {
@@ -57,9 +61,7 @@ class ClientController extends Controller
         }
     }
 
-    /**
-     * Exibe o formulário para editar um cliente existente.
-     */
+
     public function edit($id)
     {
         $client = Client::findOrFail($id);

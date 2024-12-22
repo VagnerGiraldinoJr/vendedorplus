@@ -1,24 +1,15 @@
 @extends('adminlte::page')
 
-@section('title', 'Publico')
+@section('title', 'Loja')
 
 @section('content_header')
-    <h1>Bem-vindo ao painel  {{ $user->name }}!</h1>
-
-    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
-            <li class="nav-item">
-              <a>
-                    <i class="nav-icon fas fa-shopping-cart"></i>
-                    <p>Gerenciar Pedidos</p>
-                </a>
-            </li>
-
-
-    </ul>
-@stop
+    <h1>Bem-vindo à Loja</h1>
+@endsection
 
 @section('content')
+    <h1>Bem-vindo, {{ $user->name ?? 'Visitante' }}!</h1>
+    <p>Explore nossos produtos!</p>
 
-
-@stop
+    <a href="{{ route('shop.index') }}" class="btn btn-primary">Ir para a Loja</a>
+    <a href="{{ route('shop.show', ['id' => 1]) }}" class="btn btn-secondary">Ver Produto Exemplo</a>
+@endsection

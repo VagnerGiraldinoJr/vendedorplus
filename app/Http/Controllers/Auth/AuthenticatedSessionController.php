@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -22,33 +23,42 @@ class AuthenticatedSessionController extends Controller
     /**
      * Lida com a autenticação do usuário.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(Request $request)
     {
-        // Autentica o usuário
-        $request->authenticate();
+        $credentials = $request->only('email', 'password');
 
-        // Regenera a sessão para evitar o fixação de sessão
-        $request->session()->regenerate();
-
-        // Obtém o usuário autenticado
-        $user = Auth::user();
-
-        // Verifica o papel do usuário e faz o redirecionamento adequado
-        if ($user->hasRole('admin')) {
-            return redirect()->route('admin.dashboard'); // Redireciona para a dashboard do admin
-        } else {
-
-            return redirect()->route('shop.index'); // Redireciona para a loja (para usuários comuns)
+        // Tenta autenticar como CLIENTE
+        if (Auth::guard('client')->attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('/client/shop');
         }
-    }
 
+        // Tenta autenticar como USUÁRIO (guard 'web')
+        if (Auth::guard('web')->attempt($credentials)) {
+            $request->session()->regenerate();
+
+            $user = Auth::guard('web')->user();
+
+            if ($user->hasRole('admin')) {
+                return redirect()->route('admin.dashboard');
+            }
+
+            return redirect()->route('shop.index');
+        }
+
+        // Falha na autenticação
+        return back()->withErrors([
+            'email' => 'Credenciais inválidas.',
+        ])->withInput();
+    }
     /**
      * Faz o logout do usuário.
      */
     public function destroy(Request $request): RedirectResponse
     {
-        // Realiza o logout
+        // Faz o logout de ambos os guards
         Auth::guard('web')->logout();
+        Auth::guard('client')->logout();
 
         // Invalida a sessão do usuário
         $request->session()->invalidate();

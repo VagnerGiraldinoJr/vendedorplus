@@ -52,7 +52,12 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
+        'auth' => \App\Http\Middleware\Authenticate::class,
+        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'guest.client' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
-
     ];
+
+
+
 }

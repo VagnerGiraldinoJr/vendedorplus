@@ -6,33 +6,27 @@ use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
-    // Página inicial (bem-vindo)
-    public function welcome()
-    {
-        dd('asdasda1111');
-        return view('welcome'); // Aponta para o arquivo `resources/views/welcome.blade.php`
-    }
-
-    // Listar produtos (loja)
+    /**
+     * Página inicial da loja.
+     */
     public function index()
     {
-        $user = auth()->user();
+        $user = auth()->user() ?? auth('client')->user();
         return view('shop.index', compact('user'));
-
-
     }
 
-    // Detalhes do produto
+    /**
+     * Detalhes de um produto.
+     */
     public function show($id)
     {
+        $product = [
+            'id' => $id,
+            'name' => 'Produto Exemplo',
+            'description' => 'Descrição detalhada do produto.',
+            'price' => 99.99,
+        ];
 
-
-        return view('shop.show', compact('product')); // Aponta para `resources/views/shop/show.blade.php`
-    }
-
-    public function shop()
-    {
-        $user = auth()->user();
-        return view('shop.index', compact('user'));
+        return view('shop.show', compact('product'));
     }
 }
