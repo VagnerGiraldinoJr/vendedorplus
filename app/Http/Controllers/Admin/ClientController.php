@@ -99,17 +99,17 @@ class ClientController extends Controller
     {
         $client = Client::findOrFail($id);
 
+        // Verifica se o cliente tem pedidos
         if ($client->orders()->exists()) {
-            return redirect()->route('admin.clients.index')->with('error', 'Não é possível excluir um cliente com pedidos associados.');
+            return redirect()->back()->with('error', 'Este cliente possui pedidos associados e não pode ser excluído.');
         }
 
-        try {
-            $client->delete();
-            return redirect()->route('admin.clients.index')->with('success', 'Cliente excluído com sucesso!');
-        } catch (\Exception $e) {
-            return redirect()->route('admin.clients.index')->with('error', 'Erro ao excluir cliente: ' . $e->getMessage());
-        }
+        // Caso contrário, exclui o cliente
+        $client->delete();
+
+        return redirect()->route('admin.clients.index')->with('success', 'Cliente excluído com sucesso.');
     }
+
 
     /**
      * Valida os dados do cliente.

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -8,6 +9,8 @@ class Order extends Model
 {
     use HasFactory;
 
+    protected $table = 'orders';
+
     // Adicione os campos que você deseja permitir para mass assignment
     protected $fillable = [
         'client_id', // ID do cliente
@@ -15,8 +18,11 @@ class Order extends Model
         'total',     // Total do pedido
     ];
 
-    public function client()
+    /**
+     * Relacionamento com Client
+     */
+    public function client(): BelongsTo
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Client::class, 'client_id', 'id');
     }
 }

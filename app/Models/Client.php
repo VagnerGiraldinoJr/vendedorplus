@@ -6,11 +6,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Client extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
 
+    protected $table = 'clients';
     protected $fillable = [
         'nome',
         'email',
@@ -47,4 +49,14 @@ class Client extends Authenticatable
     {
         return $this->senha;
     }
+
+    /**
+     * Relacionamento com Orders
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'client_id', 'id');
+    }
+
+
 }
