@@ -51,7 +51,7 @@ class Client extends Authenticatable
     }
 
     /**
-     * Relacionamento com Orders
+     * Relacionamento com Orders 22/12/2024
      */
     public function orders(): HasMany
     {
