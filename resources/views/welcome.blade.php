@@ -1,3 +1,6 @@
+
+
+
 @extends('adminlte::page')
 
 @section('title', 'Bem-vindo ao VendedorPlus')

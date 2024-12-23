@@ -10,6 +10,6 @@
     <h1>Bem-vindo, {{ $user->name ?? 'Visitante' }}!</h1>
     <p>Explore nossos produtos!</p>
 
-    <a href="{{ route('shop.index') }}" class="btn btn-primary">Ir para a Loja</a>
-    <a href="{{ route('shop.show', ['id' => 1]) }}" class="btn btn-secondary">Ver Produto Exemplo</a>
+    <a href="{{ route('client.shop.index') }}" class="btn btn-primary">Ir para a Loja</a>
+    <a href="{{ route('client.shop.show', ['id' => 1]) }}" class="btn btn-secondary">Ver Produto Exemplo</a>
 @endsection

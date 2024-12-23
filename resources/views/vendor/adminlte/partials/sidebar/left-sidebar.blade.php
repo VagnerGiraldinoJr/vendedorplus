@@ -47,7 +47,7 @@
 
                 @if(optional(Auth::user())->hasRole('user'))
                     <li>
-                        <a href="{{ route('shop.index') }}" class="nav-link">
+                        <a href="{{ route('client.shop.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-user"></i>
                             <p>User Dashboard</p>
                         </a>

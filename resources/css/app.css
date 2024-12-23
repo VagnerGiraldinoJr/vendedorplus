@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Tema Dark */
+body.dark-mode {
+    background-color: #343a40 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .navbar {
+    background-color: #1c1e22 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .sidebar {
+    background-color: #1c1e22 !important;
+}

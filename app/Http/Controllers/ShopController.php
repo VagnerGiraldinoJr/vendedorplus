@@ -11,6 +11,7 @@ class ShopController extends Controller
      */
     public function index()
     {
+
         $user = auth()->user() ?? auth('client')->user();
         return view('shop.index', compact('user'));
     }
