@@ -1,130 +1,170 @@
-
-
-
 @extends('adminlte::page')
 
-@section('title', 'Bem-vindo ao VendedorPlus')
+@section('title', 'Dashboard Cliente')
 
+{{-- Topo com Notificações, Perfil, Logout --}}
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
+        <h1><i class="fas fa-tachometer-alt"></i> Dashboard Cliente</h1>
+        <div class="d-flex align-items-center">
+            <!-- Notificações -->
+            <div class="mr-3">
+                <a href="#" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-bell"></i> <span class="badge badge-warning">3</span>
+                </a>
+            </div>
+            <!-- Perfil -->
+            <div class="mr-3">
+                <a href="{{ route('client.profile.edit') }}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-user"></i> Perfil
+                </a>
+            </div>
+            <!-- Logout -->
+            <div>
+                <a href="{{ route('logout') }}" class="btn btn-outline-danger btn-sm"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection
 
-        <div class="mt-2">
-            <h1>E-commerce</h1>
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                            <li class="breadcrumb-item active">E-commerce</li>
-                        </ol>
+{{-- Cards com Índices Importantes --}}
+@section('content')
+    <div class="row">
+        <!-- Card 1: Pedidos -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>150</h3>
+                    <p>Novos Pedidos</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Card 2: Usuários -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>53<sup style="font-size: 20px">%</sup></h3>
+                    <p>Taxa de Conversão</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Card 3: Novos Usuários -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>44</h3>
+                    <p>Novos Usuários</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Card 4: Alertas Críticos -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-danger">
+                <div class="inner">
+                    <h3>65</h3>
+                    <p>Alertas Críticos</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="mt-2">
-
-
-        <a href="{{ route('login') }}" class="btn btn-success btn-sm mr-2">Login</a>
-        <a href="{{ route('register') }}" class="btn btn-primary btn-sm">Registre-se</a>
-
+    <!-- Gráfico de Desempenho -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title"><i class="fas fa-chart-area"></i> Relatório de Desempenho</h3>
+        </div>
+        <div class="card-body">
+            <canvas id="salesChart" style="height: 300px;"></canvas>
+        </div>
     </div>
 
+    <!-- Produtos em Destaque -->
+    <div class="card card-solid mt-4">
+        <div class="card-header bg-success text-white">
+            <h5><i class="fas fa-gift"></i> Produtos em Destaque</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                @forelse ($products as $product)
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{ $product->imagem_principal }}" class="card-img-top"
+                                 alt="{{ $product->nome_produto }}" style="height: 150px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $product->nome_produto }}</h5>
+                                <p>{{ Str::limit($product->descricao, 50) }}</p>
+                                <p class="font-weight-bold text-success">
+                                    R$ {{ number_format($product->preco, 2, ',', '.') }}
+                                </p>
+                                <a href="{{ route('client.shop.show', $product->id) }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye"></i> Ver Detalhes
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-center">Nenhum produto disponível no momento.</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
 @endsection
 
-@section('content')
-    <div class="container-fluid">
-        <section class="content">
-            <div class="card card-solid">
-                <div class="card-body">
-                    <div class="row">
-                        <!-- Imagem do Produto -->
-                        <div class="col-12 col-sm-6">
-                            <div class="col-12">
-                                <img src="{{ asset('vendor/adminlte/dist/img/prod-1.jpg') }}"
-                                     class="product-image"
-                                     alt="Imagem do Produto">
-                            </div>
-                            <div class="col-12 product-image-thumbs mt-3">
-                                <div class="product-image-thumb active"><img
-                                        src="{{ asset('vendor/adminlte/dist/img/prod-1.jpg') }}" alt="Imagem">
-                                </div>
-                                <div class="product-image-thumb"><img
-                                        src="{{ asset('vendor/adminlte/dist/img/prod-1.jpg') }}" alt="Imagem">
-                                </div>
-                            </div>
-                        </div>
+{{-- Footer --}}
+@section('footer')
+    <footer class="text-center text-muted mt-4">
+        <p>Copyright © 2024 <a href="#">VendedorPLUS</a>. Todos os direitos reservados.</p>
+    </footer>
+@endsection
 
-                        <!-- Detalhes do Produto -->
-                        <div class="col-12 col-sm-6">
-                            <h3 class="my-3">LOWA Men’s Renegade GTX Mid Hiking Boots</h3>
-                            <p>Descrição do produto aqui. Inclua informações importantes sobre o item.</p>
+{{-- JavaScript --}}
+@section('js')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('salesChart').getContext('2d');
+        var salesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Vendas',
+                    backgroundColor: 'rgba(60,141,188,0.9)',
+                    borderColor: 'rgba(60,141,188,0.8)',
+                    data: [10, 20, 30, 40, 50, 60]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        });
+    </script>
+@endsection
 
-                            <hr>
-                            <h4>Opções Disponíveis</h4>
-                            <div class="d-flex flex-wrap">
-                                <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons">
-                                    <label class="btn btn-default text-center active">
-                                        <input type="radio" name="color_option" autocomplete="off" checked>
-                                        Verde<br>
-                                        <i class="fas fa-circle text-green"></i>
-                                    </label>
-                                    <label class="btn btn-default text-center">
-                                        <input type="radio" name="color_option" autocomplete="off">
-                                        Azul<br>
-                                        <i class="fas fa-circle text-blue"></i>
-                                    </label>
-                                </div>
-                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-default text-center">
-                                        <input type="radio" name="size_option" autocomplete="off">
-                                        S<br>Pequeno
-                                    </label>
-                                    <label class="btn btn-default text-center active">
-                                        <input type="radio" name="size_option" autocomplete="off">
-                                        M<br>Médio
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="bg-gray py-2 px-3 mt-4">
-                                <h2 class="mb-0">$80.00</h2>
-                                <h4 class="mt-0"><small>Ex Tax: $80.00</small></h4>
-                            </div>
-
-                            <div class="mt-4">
-                                <a href="#" class="btn btn-primary btn-lg btn-flat">
-                                    <i class="fas fa-cart-plus mr-2"></i>Adicionar ao Carrinho
-                                </a>
-                                <a href="#" class="btn btn-default btn-lg btn-flat">
-                                    <i class="fas fa-heart mr-2"></i>Favoritar
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <nav>
-                                <div class="nav nav-tabs" id="product-tab" role="tablist">
-                                    <a class="nav-item nav-link active" id="product-desc-tab" data-toggle="tab"
-                                       href="#product-desc" role="tab">Descrição</a>
-                                    <a class="nav-item nav-link" id="product-comments-tab" data-toggle="tab"
-                                       href="#product-comments" role="tab">Comentários</a>
-                                    <a class="nav-item nav-link" id="product-rating-tab" data-toggle="tab"
-                                       href="#product-rating" role="tab">Avaliações</a>
-                                </div>
-                            </nav>
-                            <div class="tab-content p-3" id="nav-tabContent">
-                                <div class="tab-pane fade show active" id="product-desc" role="tabpanel">
-                                    Aqui você pode colocar uma descrição detalhada do produto.
-                                </div>
-                                <div class="tab-pane fade" id="product-comments" role="tabpanel">
-                                    Exiba comentários de clientes sobre o produto.
-                                </div>
-                                <div class="tab-pane fade" id="product-rating" role="tabpanel">
-                                    Exiba avaliações e classificações dos usuários.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
+{{-- Right Sidebar --}}
+@section('right_sidebar')
+    <h5 class="text-white mt-3">Configurações</h5>
+    <p class="text-white">Modo Dark/Light</p>
+    <a href="#" class="btn btn-outline-light btn-block"
+       onclick="document.body.classList.toggle('dark-mode')">
+        <i class="fas fa-moon"></i> Alternar Tema
+    </a>
 @endsection

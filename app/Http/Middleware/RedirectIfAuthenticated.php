@@ -14,7 +14,7 @@ class RedirectIfAuthenticated
         if (Auth::guard($guard)->check()) {
             switch ($guard) {
                 case 'client':
-                    return redirect('/client/shop'); // Clientes são redirecionados para /client/shop
+                    return redirect('/client/welcome'); // Clientes são redirecionados para //client/welcome
                 case 'web':
                     $user = Auth::guard($guard)->user();
                     if ($user->hasRole('admin')) {

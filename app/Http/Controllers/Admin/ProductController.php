@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
     public function index()
     {
-
-        $products = Product::paginate(12); // Assumindo que você tem um modelo "Product"
-        return view('home', compact('products'));
-
-//        $products = Product::all();
-//        return view('admin.products.index', compact('products'));
+        $products = Product::paginate(10); // 10 produtos por página
+        return view('admin.products.index', compact('products'));
     }
 
     public function create()
@@ -27,19 +24,19 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'codigo_produto' => 'required|unique:products',
-            'nome_produto' => 'required',
-            'preco' => 'nullable|numeric',
-            'estoque' => 'nullable|integer',
+            'nome_produto' => 'required|string',
+            'preco' => 'required|numeric',
+            'estoque' => 'required|integer',
+            'imagem_principal' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
+
+        if ($request->hasFile('imagem_principal')) {
+            $validated['imagem_principal'] = $request->file('imagem_principal')->store('products', 'public');
+        }
 
         Product::create($validated);
 
-        return redirect()->route('products.index')->with('success', 'Produto criado com sucesso!');
-    }
-
-    public function show(Product $product)
-    {
-        return view('admin.products.show', compact('product'));
+        return redirect()->route('admin.products.index')->with('success', 'Produto criado com sucesso!');
     }
 
     public function edit(Product $product)
@@ -51,19 +48,32 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'codigo_produto' => 'required|unique:products,codigo_produto,' . $product->id,
-            'nome_produto' => 'required',
-            'preco' => 'nullable|numeric',
-            'estoque' => 'nullable|integer',
+            'nome_produto' => 'required|string',
+            'preco' => 'required|numeric',
+            'estoque' => 'required|integer',
+            'imagem_principal' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
+
+        if ($request->hasFile('imagem_principal')) {
+            if ($product->imagem_principal) {
+                Storage::disk('public')->delete($product->imagem_principal);
+            }
+            $validated['imagem_principal'] = $request->file('imagem_principal')->store('products', 'public');
+        }
 
         $product->update($validated);
 
-        return redirect()->route('products.index')->with('success', 'Produto atualizado com sucesso!');
+        return redirect()->route('admin.products.index')->with('success', 'Produto atualizado com sucesso!');
     }
 
     public function destroy(Product $product)
     {
+        if ($product->imagem_principal) {
+            Storage::disk('public')->delete($product->imagem_principal);
+        }
+
         $product->delete();
-        return redirect()->route('products.index')->with('success', 'Produto excluído com sucesso!');
+
+        return redirect()->route('admin.products.index')->with('success', 'Produto excluído com sucesso!');
     }
 }

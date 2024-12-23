@@ -20,6 +20,12 @@ return [
     'title_prefix' => '',
     'title_postfix' => '',
 
+    'theme' => [
+        'layout' => 'fixed',
+        'dark_mode_switch' => true,
+    ],
+
+
     /*
     |--------------------------------------------------------------------------
     | Favicon
@@ -238,7 +244,7 @@ return [
     |
     */
 
-    'right_sidebar' => false,
+    'right_sidebar' => true,
     'right_sidebar_icon' => 'fas fa-cogs',
     'right_sidebar_theme' => 'dark',
     'right_sidebar_slide' => true,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -11,23 +12,19 @@ class ShopController extends Controller
      */
     public function index()
     {
-
-        $user = auth()->user() ?? auth('client')->user();
-        return view('shop.index', compact('user'));
+        $products = Product::where('status', 'ativo')->paginate(5); // 9 produtos por página
+        dd('aaaaaaaaaaaaa');
+        return view('welcome', compact('products'));
     }
+
 
     /**
      * Detalhes de um produto.
      */
     public function show($id)
     {
-        $product = [
-            'id' => $id,
-            'name' => 'Produto Exemplo',
-            'description' => 'Descrição detalhada do produto.',
-            'price' => 99.99,
-        ];
 
-        return view('shop.show', compact('product'));
+        $products = Product::where('status', 'ativo')->paginate(5); // 9 produtos por página
+        return view('shop.index', compact('products'));
     }
 }

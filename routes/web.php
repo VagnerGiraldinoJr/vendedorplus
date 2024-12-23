@@ -122,10 +122,13 @@
 
 
 use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -163,7 +166,7 @@ Route::prefix('admin')->middleware(['auth:web', 'role:admin'])->name('admin.')->
 
     Route::resource('/clients', ClientController::class)->names('clients');
     Route::resource('/orders', ClientController::class)->names('orders');
-    Route::resource('/products', ClientController::class)->names('products');
+    Route::resource('/products', ProductController::class)->names('products');
 });
 
 /*
@@ -172,8 +175,8 @@ Route::prefix('admin')->middleware(['auth:web', 'role:admin'])->name('admin.')->
 |--------------------------------------------------------------------------
 */
 Route::prefix('shop')->middleware(['auth:web', 'role:user'])->name('shop.')->group(function () {
-    Route::get('/', [ShopController::class, 'index'])->name('index');
-    Route::get('/{id}', [ShopController::class, 'show'])->name('show');
+    Route::get('shop', [ShopController::class, 'index'])->name('shop.index');
+    Route::get('shop/{id}', [ShopController::class, 'show'])->name('shop.show');
 });
 
 /*
@@ -182,8 +185,14 @@ Route::prefix('shop')->middleware(['auth:web', 'role:user'])->name('shop.')->gro
 |--------------------------------------------------------------------------
 */
 Route::prefix('client')->middleware(['auth:client'])->name('client.')->group(function () {
+    Route::get('welcome', [WelcomeController::class, 'index'])->name('welcome');
     Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
     Route::get('/shop/{id}', [ShopController::class, 'show'])->name('shop.show');
+    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('password/edit', [ProfileController::class, 'password'])->name('password.edit');
+    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+    // Route::get('wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    // Route::get('contact', [ContactController::class, 'index'])->name('contact');
 });
 
 /*
