@@ -160,12 +160,12 @@ return [
     |
     */
 
-    'layout_topnav' => null,
-    'layout_boxed' => null,
-    'layout_fixed_sidebar' => null,
-    'layout_fixed_navbar' => null,
-    'layout_fixed_footer' => null,
-    'layout_dark_mode' => null,
+    'layout_topnav' => true, // Ativa o menu de navegação no topo
+    'layout_boxed' => false, // Layout encaixotado (deixe false para padrão)
+    'layout_fixed_sidebar' => true, // Fixa a sidebar na tela
+    'layout_fixed_navbar' => true, // Fixa a navbar no topo ao rolar a página
+    'layout_fixed_footer' => true, // Fixa o rodapé (footer)
+    'layout_dark_mode' => true, // Ativa modo escuro (Dark Mode)
 
     /*
     |--------------------------------------------------------------------------

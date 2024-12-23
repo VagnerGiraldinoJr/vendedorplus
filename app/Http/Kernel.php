@@ -13,6 +13,10 @@ class Kernel extends HttpKernel
      *
      * @var array
      */
+    protected $commands = [
+        \App\Console\Commands\ClearAllCaches::class,
+    ];
+
     protected $middleware = [
         \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
