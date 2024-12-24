@@ -126,3 +126,7 @@
 Vagner Giraldino Jr.
 🚀🚀🚀🚀🚀🚀🚀🚀🚀
 https://pt.gravatar.com/vgiraldino
+
+
+![image](https://github.com/user-attachments/assets/5549d7bd-9f37-4546-8832-ea9001406a54)
+
