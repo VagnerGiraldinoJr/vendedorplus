@@ -17,8 +17,8 @@ return [
     */
 
     'title' => 'Vendedor Plus',
-    'title_prefix' => '',
-    'title_postfix' => '',
+    'title_prefix' => 'V+',
+    'title_postfix' => 'V+',
 
     'theme' => [
         'layout' => 'fixed',
@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'use_ico_only' => false,
+    'use_ico_only' => true,
     'use_full_favicon' => false,
 
     /*
@@ -142,7 +142,7 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
+    'usermenu_header' => true,
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => false,
     'usermenu_desc' => false,
@@ -160,12 +160,12 @@ return [
     |
     */
 
-    'layout_topnav' => true, // Ativa o menu de navegação no topo
+    'layout_topnav' => false, // Ativa o menu de navegação no topo
     'layout_boxed' => false, // Layout encaixotado (deixe false para padrão)
     'layout_fixed_sidebar' => true, // Fixa a sidebar na tela
     'layout_fixed_navbar' => true, // Fixa a navbar no topo ao rolar a página
-    'layout_fixed_footer' => true, // Fixa o rodapé (footer)
-    'layout_dark_mode' => true, // Ativa modo escuro (Dark Mode)
+    'layout_fixed_footer' => false, // Fixa o rodapé (footer)
+    'layout_dark_mode' => false, // Ativa modo escuro (Dark Mode)
 
     /*
     |--------------------------------------------------------------------------
@@ -323,6 +323,31 @@ return [
             'url' => 'user/pedidos',
             'icon' => 'fas fa-shopping-cart',
             'can' => 'isUser', // Permissão específica para user
+        ],
+        [
+            'text' => 'Gestão de Produtos',
+            'url' => 'admin/products',
+            'icon' => 'fas fa-boxes',
+        ],
+        [
+            'text' => 'Gestão de Clientes',
+            'url' => 'admin/clients',
+            'icon' => 'fas fa-users',
+        ], [
+            'text' => 'Gestão de Banners',
+            'url' => 'admin/banners',
+            'icon' => 'fas fa-images', // Ícone adequado para banners
+
+        ],
+        [
+            'text' => 'Gestão de Pedidos',
+            'url' => 'admin/orders',
+            'icon' => 'fas fa-shopping-cart',
+        ],
+        [
+            'text' => 'Financeiro',
+            'url' => 'admin/finance',
+            'icon' => 'fas fa-money-bill-wave',
         ],
     ],
 

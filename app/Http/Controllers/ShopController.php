@@ -13,7 +13,7 @@ class ShopController extends Controller
     public function index()
     {
         $products = Product::where('status', 'ativo')->paginate(5); // 9 produtos por página
-        dd('aaaaaaaaaaaaa');
+
         return view('welcome', compact('products'));
     }
 

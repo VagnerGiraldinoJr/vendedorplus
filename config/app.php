@@ -74,6 +74,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         JeroenNoten\LaravelAdminLte\AdminLteServiceProvider::class, // <-- Verifique se esta linha está presente
+        Intervention\Image\ImageServiceProvider::class,
+
 
     ],
 
@@ -126,6 +128,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Image' => Intervention\Image\Facades\Image::class,
 
     ],
     'pagination' => 'bootstrap-4',

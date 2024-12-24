@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
 {
     public function index()
     {
-        // Busca produtos ativos com paginação
-        $products = Product::where('status', 'ativo')->paginate(6);
+        // Dados adicionais para a página inicial, se necessário
+        $siteData = [
+            'title' => 'VendedorPLUS - Sistema de Gestão de Vendas',
+            'description' => 'Um sistema completo para gestão de vendas porta a porta.',
+        ];
 
-        return view('welcome', compact('products'));
+        return view('landing', compact('siteData'));
     }
 }
