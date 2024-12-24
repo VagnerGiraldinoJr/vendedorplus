@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ClientRegistrationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\Admin\AdminController;
@@ -107,3 +108,9 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::resource('banners', BannerController::class);
 });
+
+/// Formulário de Cadastro
+Route::get('/register/client', [ClientRegistrationController::class, 'showRegistrationForm'])->name('clients.register');
+
+// Processamento do Cadastro
+Route::post('/register/client', [ClientRegistrationController::class, 'store'])->name('clients.store');

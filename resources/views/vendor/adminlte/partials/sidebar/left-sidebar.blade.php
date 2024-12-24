@@ -121,11 +121,6 @@
     </div>
 </aside>
 
----
-
-## 🛠️ **JavaScript Atualizado**
-
-```html
 <script>
     function updateDateTime() {
         const timeElement = document.getElementById('current-time');
