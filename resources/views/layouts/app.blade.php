@@ -64,7 +64,7 @@
                                 <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
                             </h3>
                             <p class="text-sm">Mensagem de teste...</p>
-                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 horas atrás</p>
+                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 horasdasdas atrás</p>
                         </div>
                     </div>
                 </a>

@@ -50,10 +50,11 @@ class ClientController extends Controller
             ]);
 
             // Garantir que a role 'user' exista para o guard 'web'
-            $role = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
-
+            $role = Role::firstOrCreate(['name' => 'client', 'guard_name' => 'web']);
+            dd($role);
             // Atribuir role 'user' (guard web) ao cliente
             $client->assignRole($role);
+            dd(  $client->assignRole($role));
 
             return redirect()->route('admin.clients.index')->with('success', 'Cliente criado com sucesso!');
         } catch (\Exception $e) {
@@ -83,7 +84,7 @@ class ClientController extends Controller
                 'email' => $validated['email'],
                 'celular' => $validated['celular'],
                 'cpf' => $validated['cpf'] ?? $client->cpf, // Mantém o CPF atual se não for enviado
-                'senha' => !empty($validated['senha']) ? bcrypt($validated['senha']) : $client->senha,
+                'senha' => !empty($validated['senha']) ? bcrypt($validated['senha']) : $client->password,
             ]);
 
             return redirect()->route('admin.clients')->with('success', 'Cliente atualizado com sucesso!');

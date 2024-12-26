@@ -15,23 +15,35 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#beneficios">Benefícios</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-primary text-white" href="{{ route('login') }}">🔑 Login</a>
-                    </li>
+                    @if(Auth::guard('client')->check())
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-success text-white" href="{{ route('client.welcome') }}">🏠 Área do Cliente</a>
+                        </li>
+                        <li class="nav-item">
+                            <form action="{{ route('client.logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-danger">🚪 Logout</button>
+                            </form>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-primary text-white" href="{{ route('client.login') }}">🔑 Login Cliente</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>
     </nav>
+
 @endsection
 
 @section('content')
-
-    <!-- 🚀 Seção 1: Banner Dinâmico -->
+    <!-- 🚀 Seção 1: Banner Dinâmico com Swiper.js -->
     <section class="mt-5 pt-3">
-        <div id="bannerCarousel" class="carousel slide mb-5 shadow-sm rounded" data-bs-ride="carousel" data-bs-interval="3000">
-            <div class="carousel-inner">
-                @forelse ($banners as $index => $banner)
-                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+        <div class="swiper-container mb-5 shadow-sm rounded">
+            <div class="swiper-wrapper">
+                @forelse ($banners as $banner)
+                    <div class="swiper-slide">
                         <img src="{{ asset('storage/' . $banner->image_path) }}" class="d-block w-100" alt="{{ $banner->alt_text }}">
                         <div class="carousel-caption d-none d-md-block">
                             <h5>{{ $banner->title }}</h5>
@@ -39,7 +51,7 @@
                         </div>
                     </div>
                 @empty
-                    <div class="carousel-item active">
+                    <div class="swiper-slide">
                         <img src="{{ asset('images/default-banner.jpg') }}" class="d-block w-100" alt="Banner Padrão">
                         <div class="carousel-caption d-none d-md-block">
                             <h5>Bem-vindo ao VendedorPLUS</h5>
@@ -48,118 +60,85 @@
                     </div>
                 @endforelse
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
         </div>
     </section>
 
-    <!-- ✅ Seção 2: Proposta de Valor -->
+    <!-- ✅ Seção de Boas-Vindas -->
     <section class="text-center my-5">
-        <h2 class="fw-bold">💼 Simplifique suas Vendas e Maximize seus Lucros</h2>
-        <p class="lead">Com o <strong>VendedorPLUS</strong>, você tem controle total do seu negócio na palma da mão.</p>
-        <a href="{{ route('clients.register') }}" class="btn btn-primary btn-lg mt-3">🚀 Cadastre-se Gratuitamente</a>
-        <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-lg mt-3 ms-2">🔑 Já tem uma conta? Faça Login</a>
+        @if($user)
+            <h2 class="fw-bold">👋 Bem-vindo, {{ $user->nome ?? $user->name }}!</h2>
+            <p class="lead">Você está autenticado como <strong>{{ $guard === 'client' ? 'Cliente' : 'Usuário' }}</strong>.</p>
+            <a href="{{ $guard === 'client' ? route('client.shop.index') : route('shop.index') }}" class="btn btn-success mt-3">🛍️ Ir para a Loja</a>
+            <form action="{{ $guard === 'client' ? route('client.logout') : route('logout') }}" method="POST" class="mt-3">
+                @csrf
+                <button type="submit" class="btn btn-danger">🚪 Logout</button>
+            </form>
+        @else
+            <h2 class="fw-bold">🎯 Experimente Gratuitamente por 7 Dias</h2>
+            <p class="lead">Teste todas as funcionalidades sem compromisso!</p>
+            <a href="{{ route('clients.register') }}" class="btn btn-primary btn-lg mt-3">🚀 Cadastre-se Gratuitamente</a>
+            <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-lg mt-3 ms-2">🔑 Já tem uma conta? Faça Login</a>
+        @endif
     </section>
 
-    <!-- ✅ Seção 3: Benefícios Aprimorados -->
+    <!-- ✅ Seção de Benefícios -->
     <section id="beneficios" class="container text-center my-5">
         <div class="row g-4">
             <div class="col-md-3">
-                <div class="card shadow-sm feature-card">
+                <div class="card border-0 shadow-sm feature-card">
                     <div class="card-body">
-                        <div class="feature-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <h5 class="mt-3">📊 Relatórios Avançados</h5>
+                        <i class="fas fa-chart-line fa-3x text-primary"></i>
+                        <h5 class="mt-3 fw-bold">📊 Relatórios Avançados</h5>
                         <p>Monitore seu desempenho com gráficos claros e intuitivos.</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card shadow-sm feature-card">
+                <div class="card border-0 shadow-sm feature-card">
                     <div class="card-body">
-                        <div class="feature-icon">
-                            <i class="fas fa-cogs"></i>
-                        </div>
-                        <h5 class="mt-3">💼 Gestão Completa</h5>
-                        <p>Controle tudo: vendas, clientes e estoque, com eficiência.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm feature-card">
-                    <div class="card-body">
-                        <div class="feature-icon">
-                            <i class="fas fa-mobile-alt"></i>
-                        </div>
-                        <h5 class="mt-3">📱 Interface Responsiva</h5>
-                        <p>Acesse a plataforma de qualquer dispositivo com facilidade.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm feature-card">
-                    <div class="card-body">
-                        <div class="feature-icon">
-                            <i class="fas fa-headset"></i>
-                        </div>
-                        <h5 class="mt-3">📣 Suporte 24/7</h5>
-                        <p>Atendimento rápido e suporte em tempo real.</p>
+                        <i class="fas fa-cogs fa-3x text-primary"></i>
+                        <h5 class="mt-3 fw-bold">💼 Gestão Completa</h5>
+                        <p>Controle tudo: vendas, clientes e estoque.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- ✅ Botão Voltar ao Topo -->
+    <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' });" class="btn btn-primary back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 @endsection
 
 @section('css')
-    <style>
-        /* ✅ Ocultar content-header apenas nesta página */
-        .content-header {
-            display: none !important;
-        }
-
-        /* ✅ Ajuste do Banner */
-        #bannerCarousel {
-            margin-top: 0 !important;
-        }
-
-        .carousel-inner img {
-            max-height: 400px;
-            object-fit: cover;
-        }
-
-        /* ✅ Estilização dos Cards */
-        .card {
-            border-radius: 10px;
-        }
-
-        .feature-card {
-            transition: transform 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        .feature-icon i {
-            font-size: 2.5rem;
-            color: #4e73df;
-        }
-
-        .btn-primary, .btn-success {
-            font-weight: bold;
-        }
-    </style>
+    .navbar .dropdown-menu { min-width: 200px; }
+    .feature-card { transition: transform 0.3s ease; }
+    .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: none;
+    }
+    .back-to-top.show { display: block; }
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
     <script>
-        console.log('Landing Page carregada com sucesso!');
+        var swiper = new Swiper('.swiper-container', {
+            loop: true,
+            autoplay: { delay: 3000 },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+        });
     </script>
 @endsection

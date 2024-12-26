@@ -63,10 +63,8 @@ return [
         'clients' => [
             'driver' => 'eloquent',
             'model' => App\Models\Client::class,
-            'password_column' => 'senha',
         ],
     ],
-
 
 
     /*

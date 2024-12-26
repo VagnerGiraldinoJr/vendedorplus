@@ -10,21 +10,28 @@ class ClientLoginController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest.client')->except('logout');
+        // Garante que apenas visitantes podem acessar a tela de login
+        $this->middleware('guest:client')->except('logout');
     }
 
+    /**
+     * Exibir o formulário de login.
+     */
     public function showLoginForm()
     {
         return view('auth.client.login');
     }
 
+    /**
+     * Processar o login.
+     */
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('client')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/client/shop');
+            return redirect()->route('client.welcome');
         }
 
         return back()->withErrors([
@@ -32,6 +39,9 @@ class ClientLoginController extends Controller
         ]);
     }
 
+    /**
+     * Fazer logout.
+     */
     public function logout(Request $request)
     {
         Auth::guard('client')->logout();
@@ -39,6 +49,6 @@ class ClientLoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/client/login');
+        return redirect()->route('client.login');
     }
 }

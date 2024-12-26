@@ -8,23 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class RedirectIfAuthenticated
 {
-
-    public function handle($request, Closure $next, $guard = null)
+    public function handle(Request $request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
             switch ($guard) {
                 case 'client':
-                    return redirect('/client/welcome'); // Clientes são redirecionados para //client/welcome
-                case 'web':
-                    $user = Auth::guard($guard)->user();
-                    if ($user->hasRole('admin')) {
-                        return redirect('/admin/dashboard'); // Admins vão para /admin/dashboard
-                    }
-                    return redirect('/shop'); // Usuários comuns vão para /shop
+                    return redirect()->route('client.welcome');
+                case 'admin':
+                    return redirect()->route('admin.dashboard');
+                default:
+                    return redirect('/home');
             }
         }
 
         return $next($request);
     }
-
 }

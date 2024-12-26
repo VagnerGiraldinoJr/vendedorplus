@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -25,61 +25,31 @@ class AuthenticatedSessionController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        // 🚀 Nova Implementação com Autenticação Ordenada
-
-        // 1. Autentica como CLIENT (Guard 'client')
+        // 🚀 1️⃣ Autenticação pelo Guard 'client'
         if (Auth::guard('client')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('client.shop.index');
+
+            return redirect()->intended(route('client.welcome')); // ✅ Cliente autenticado
         }
 
-        // 2. Autentica como Usuário Comum/Admin (Guard 'web')
+        // 🚀 2️⃣ Autenticação pelo Guard 'web'
         if (Auth::guard('web')->attempt($credentials)) {
             $request->session()->regenerate();
 
             $user = Auth::guard('web')->user();
 
             if ($user->hasRole('admin')) {
-                return redirect()->route('admin.dashboard');
-            }
-dd('shop.index123');
-            return redirect()->route('shop.index');
-        }
 
-        // 3. Falha na Autenticação
-        return back()->withErrors([
-            'email' => 'Credenciais inválidas.',
-        ])->withInput();
-
-        /*
-        // 🔄 IMPLEMENTAÇÃO ANTERIOR (Comentada)
-
-        $credentials = $request->only('email', 'password');
-
-        // Tenta autenticar como CLIENTE
-        if (Auth::guard('client')->attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/client/shop');
-        }
-
-        // Tenta autenticar como USUÁRIO (guard 'web')
-        if (Auth::guard('web')->attempt($credentials)) {
-            $request->session()->regenerate();
-
-            $user = Auth::guard('web')->user();
-
-            if ($user->hasRole('admin')) {
-                return redirect()->route('admin.dashboard');
+                return redirect()->intended(route('admin.dashboard')); // ✅ Admin autenticado
             }
 
-            return redirect()->route('shop.index');
+            return redirect()->intended(route('client.shop.index')); // ✅ Usuário comum
         }
 
-        // Falha na autenticação
+        // ⚠️ 3️⃣ Falha na Autenticação
         return back()->withErrors([
-            'email' => 'Credenciais inválidas.',
+            'email' => 'Credenciais inválidas. Verifique seu email e senha.',
         ])->withInput();
-        */
     }
 
     /**
@@ -87,40 +57,21 @@ dd('shop.index123');
      */
     public function destroy(Request $request): RedirectResponse
     {
-        // 🚀 Nova Implementação com Checagem de Guards Ativos
-
+        // 🚀 Logout para Guard 'web'
         if (Auth::guard('web')->check()) {
             Auth::guard('web')->logout();
         }
 
+        // 🚀 Logout para Guard 'client'
         if (Auth::guard('client')->check()) {
             Auth::guard('client')->logout();
         }
 
-        // Invalida a sessão do usuário
+        // ✅ Invalida a sessão
         $request->session()->invalidate();
-
-        // Regenera o token CSRF
         $request->session()->regenerateToken();
 
-        // Redireciona para a página inicial
-        return redirect('/');
-
-        /*
-        // 🔄 IMPLEMENTAÇÃO ANTERIOR (Comentada)
-
-        // Faz o logout de ambos os guards
-        Auth::guard('web')->logout();
-        Auth::guard('client')->logout();
-
-        // Invalida a sessão do usuário
-        $request->session()->invalidate();
-
-        // Regenera o token CSRF
-        $request->session()->regenerateToken();
-
-        // Redireciona para a página inicial
-        return redirect('/');
-        */
+        // ✅ Redireciona para a página inicial
+        return redirect('/')->with('success', 'Logout bem-sucedido!');
     }
 }

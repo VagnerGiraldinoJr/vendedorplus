@@ -14,7 +14,7 @@ class ShopController extends Controller
     {
         $products = Product::where('status', 'ativo')->paginate(5); // 9 produtos por página
 
-        return view('welcome', compact('products'));
+        return view('client.shop.index', compact('products'));
     }
 
 
@@ -25,6 +25,6 @@ class ShopController extends Controller
     {
 
         $products = Product::where('status', 'ativo')->paginate(5); // 9 produtos por página
-        return view('shop.index', compact('products'));
+        return view('client.shop.index', compact('products'));
     }
 }

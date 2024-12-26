@@ -11,10 +11,9 @@ class CheckRole
 {
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        // Autenticação padrão usando guard web
-        $user = Auth::guard('web')->user();
+        $user = Auth::guard('client')->user() ?? Auth::guard('web')->user();
 
-        if ($user && $user->hasRole($role, 'web')) {
+        if ($user && $user->hasRole($role)) {
             return $next($request);
         }
 

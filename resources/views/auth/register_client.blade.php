@@ -65,12 +65,13 @@
                         <label for="senha">🔑 Senha</label>
                         <input type="password" name="password" class="form-control" placeholder="Digite sua senha"
                                required>
+
                     </div>
 
                     <!-- Confirmação de Senha -->
                     <div class="form-group mb-4">
-                        <label for="senha_confirmation">🔄 Confirme sua Senha</label>
-                        <input type="password" name="senha_confirmation" class="form-control"
+                        <label for="password_confirmation">🔄 Confirme sua Senha</label>
+                        <input type="password" name="password_confirmation" class="form-control"
                                placeholder="Confirme sua senha" required>
                     </div>
 
